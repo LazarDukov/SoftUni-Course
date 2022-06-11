@@ -37,6 +37,6 @@ public class Main {
 
         System.out.printf("Highest Average Salary: %s%n", highestDepartment.getName());
         highestDepartment.getEmployees().stream()
-                .sorted((e1, e2) -> (int) e2.getSalary() - (int) e1.getSalary()).forEach(System.out::println);
+                .sorted((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary())).forEach(System.out::println);
     }
 }
