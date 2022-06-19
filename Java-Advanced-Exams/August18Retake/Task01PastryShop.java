@@ -37,12 +37,12 @@ public class pastryShop {
                 case 75:
                     liquids.poll();
                     ingredients.pop();
-                    pie++;
+                    pastry++;
                     break;
                 case 100:
                     liquids.poll();
                     ingredients.pop();
-                    pastry++;
+                    pie++;
                     break;
                 default:
                     liquids.poll();
