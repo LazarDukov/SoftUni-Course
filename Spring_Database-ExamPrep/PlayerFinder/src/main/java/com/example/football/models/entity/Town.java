@@ -24,18 +24,21 @@ public class Town extends BaseEntity {
     @Min(1)
     private int population;
 
-    @Column(name = "travel_guide", columnDefinition = "TEXT",nullable = false)
+    @Column(name = "travel_guide", columnDefinition = "TEXT", nullable = false)
     @Size(min = 10)
-    private String description;
+    private String travelGuide;
 
+    public String toString() {
+    return String.format(name + " - " + population);
+    }
 
     public Town() {
     }
 
-    public Town(String name, int population, String description) {
+    public Town(String name, int population, String travelGuide) {
         this.name = name;
         this.population = population;
-        this.description = description;
+        this.travelGuide = travelGuide;
     }
 
     public String getName() {
@@ -54,13 +57,11 @@ public class Town extends BaseEntity {
         this.population = population;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTravelGuide() {
+        return travelGuide;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTravelGuide(String travelGuide) {
+        this.travelGuide = travelGuide;
     }
-
-
 }
