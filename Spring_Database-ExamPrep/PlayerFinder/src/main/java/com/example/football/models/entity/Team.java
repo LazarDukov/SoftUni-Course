@@ -84,4 +84,8 @@ public class Team extends BaseEntity {
     public void setTown(Town town) {
         this.town = town;
     }
+
+    public String toString() {
+        return String.format(name + " - " + fanBase);
+    }
 }

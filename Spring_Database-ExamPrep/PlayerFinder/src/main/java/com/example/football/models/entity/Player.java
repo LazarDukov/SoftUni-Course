@@ -7,7 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "players")
@@ -19,25 +21,24 @@ public class Player extends BaseEntity {
     //•	birth date – a date in the "dd/MM/yyyy" format.
     //•	position – one of the following – ATT, MID, DEF.
     //o	Note: The players table has relations with the towns, teams and stats tables.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "first_name")
 
-    @Column(name = "first_name", unique = true, nullable = false)
-    @Size(min = 2)
     private String firstName;
 
-    @Column(name = "last_name", unique = true, nullable = false)
-    @Size(min = 2)
+    @Column(name = "last_name")
+
     private String lastName;
 
-    @Email
-    @NotNull
-    @UniqueElements
+    @Column(unique = true)
     private String email;
 
-    @Column(name = "birth_date", nullable = false)
-    private Date birthDate;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
-    @Enumerated
-    @NotNull
+    @Column
     private Position position;
 
     @OneToOne
@@ -52,7 +53,7 @@ public class Player extends BaseEntity {
     public Player() {
     }
 
-    public Player(String firstName, String lastName, String email, Date birthDate, Position position, Stat stat, Team team, Town town) {
+    public Player(String firstName, String lastName, String email, LocalDate birthDate, Position position, Stat stat, Team team, Town town) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -87,11 +88,11 @@ public class Player extends BaseEntity {
         this.email = email;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -125,5 +126,30 @@ public class Player extends BaseEntity {
 
     public void setTown(Town town) {
         this.town = town;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return id == player.id && Objects.equals(email, player.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
+    }
+
+    public String toString() {
+        //"Player - {firstName} {lastName}
+        //	Position - {position name}
+        //Team - {team name}
+        //	Stadium - {stadium name}
+        //. . . "
+        return String.format("Player - %s %s%n" +
+                "\tPosition - %s%n" +
+                "Team - %s%n" +
+                "\tStadium - %s", this.firstName, this.lastName, this.position, this.team.getName(), this.team.getStadiumName());
     }
 }
