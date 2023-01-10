@@ -22,10 +22,12 @@ import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.example.football.util.Paths.PLAYERS_PATH;
 
@@ -99,6 +101,13 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public String exportBestPlayers() {
-        return null;
+        //•	Select only players with birth date after 01-01-1995 and before 01-01-2003
+        //•	Return the information in this format:
+        //"Player - {firstName} {lastName}
+        //	Position - {position name}
+        LocalDate before = LocalDate.of(2003,1,1);
+        LocalDate after = LocalDate.of(1995,1,1);
+List<Player> playersList = this.playerRepository.findByBirthDateBetweenOrderByStatShootingDescStatPassingDescStatEnduranceDescLastNameAsc(after, before);
+        return playersList.stream().map(Player::toString).collect(Collectors.joining("\n"));
     }
 }
