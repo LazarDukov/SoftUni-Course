@@ -10,10 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public enum CategoryType {
 
-    COFFEE("2"),
-    CAKE("10"),
-    DRINK("1"),
-    OTHER("5");
+    COFFEE(2),
+    CAKE(10),
+    DRINK(1),
+    OTHER(5);
 
-    private String type;
+    private int neededTime;
     }
