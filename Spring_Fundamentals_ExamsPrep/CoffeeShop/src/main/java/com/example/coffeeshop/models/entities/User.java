@@ -2,11 +2,16 @@ package com.example.coffeeshop.models.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,6 +35,9 @@ public class User extends BaseEntity {
     @Column
     private String email;
 
+    @OneToMany(mappedBy = "employee")
+    @Fetch(FetchMode.JOIN)
+    private Set<Order> orders;
 
 }
 //•	Has an Id – UUID-string or Long
