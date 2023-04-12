@@ -24,6 +24,9 @@ public class Post extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<User> userLikes;
 
+    @Column
+    private int likes;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Mood mood;
     //Post
