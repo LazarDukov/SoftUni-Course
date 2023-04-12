@@ -64,4 +64,15 @@ public class PostService {
     }
 
 
+    public void removePostById(Long id) {
+        this.postRepository.deleteById(id);
+    }
+
+    public void likePostWithId(Long postId, Long userId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
+        post.getUserLikes().add(user);
+        post.setLikes(post.getLikes() + 1);
+        postRepository.save(post);
+    }
 }

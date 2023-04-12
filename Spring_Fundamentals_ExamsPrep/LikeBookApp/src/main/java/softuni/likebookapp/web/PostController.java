@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import softuni.likebookapp.models.dtos.AddPostDTO;
@@ -48,5 +49,15 @@ public class PostController {
         return "redirect:/home";
     }
 
+    @GetMapping("/post/remove/{id}")
+    private String removePost(@PathVariable Long id) {
+        postService.removePostById(id);
+        return "redirect:/home";
+    }
 
+    @GetMapping("/post/like-post/{id}")
+    private String likePost(@PathVariable Long id) {
+        postService.likePostWithId(id, loggedUser.getId());
+        return "redirect:/home";
+    }
 }
