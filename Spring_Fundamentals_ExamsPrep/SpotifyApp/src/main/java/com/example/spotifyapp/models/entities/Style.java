@@ -10,13 +10,17 @@ public class Style {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private StyleName name;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     public Style() {
+    }
+
+    public Style(StyleName styleName) {
+        this.name = styleName;
     }
 
     public Long getId() {
