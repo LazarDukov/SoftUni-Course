@@ -3,43 +3,67 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/commons::head"></head>
 <body>
-<header th:replace="fragments/commons::nav"></header>
+<header>
+    <nav class="navbar navbar-expand-lg bg-nav rounded">
+        <a class="nav-link text-white active h5" href="/">Spotify Playlist App</a>
+        <a class="nav-link text-white active h5" href="/song/add">Add Song</a>
+
+        <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+            <ul class="navbar-nav row">
+
+
+                <li class="nav-item col-md-4">
+                    <a class="nav-link text-white active h5" href="/logout">Logout</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+</header>
+
 <main>
     <h1 class="text-center mt-2"><span class="badge badge-pill badge-dark">Add song</span></h1>
     <hr class="hr-3 w-25 bg-white"/>
 
-    <form class="mx-auto w-25 bg-blur rounded" method="" action="/">
-
+    <form class="mx-auto w-25 bg-blur rounded" th:method="POST" th:action="@{/song/add}" th:object="${addSongDTO}">
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
                 <label for="performer" class="h4 mb-2">Performer</label>
             </div>
-            <input type="text" class="form-control" id="performer" name="performer"/>
-            <small>Performer error message</small>
+            <input th:field="*{performer}"
+                   th:errorclass="'is-invalid alert-danger'"
+                   type="text" class="form-control" id="performer" name="performer"/>
+            <small class="invalid-feedback text-danger">Performer length must be between 3 and 20 characters!(inclusive 3 and 20).</small>
         </div>
 
         <div class="form-group">
             <div class="label-holder textCol d-flex justify-content-center">
                 <label for="title" class="h4 mb-2 text-white">Title</label>
             </div>
-            <input type="text" class="form-control" id="title" name="title"/>
-            <small>Title error</small>
+            <input th:field="*{title}"
+                   th:errorclass="'is-invalid alert-danger'"
+                   type="text" class="form-control" id="title" name="title"/>
+            <small class="invalid-feedback text-danger" >Title length must be between 2 and 20 characters!(inclusive 2 and 20).</small>
         </div>
 
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
                 <label for="releaseDate" class="h4 mb-2">Release date</label>
             </div>
-            <input type="date" class="form-control" id="releaseDate" name="releaseDate"/>
-            <small>Release date error</small>
+            <input th:field="*{releaseDate}"
+                   th:errorclass="'is-invalid alert-danger'"
+                   type="date" class="form-control" id="releaseDate" name="releaseDate"/>
+            <small class="invalid-feedback text-danger">The date cannot be in the future!</small>
         </div>
 
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
                 <label for="duration" class="h4 mb-2">Duration in seconds</label>
             </div>
-            <input type="number" step="1" class="form-control" id="duration" name="duration"/>
-            <small>Duration error message</small>
+            <input th:field="*{durationInSeconds}"
+                   th:errorclass="'is-invalid alert-danger'"
+                   type="number" step="1" class="form-control" id="duration" name="duration"/>
+            <small class="invalid-feedback text-danger">Duration must be positive!</small>
         </div>
 
         <div class="form-group">
@@ -47,14 +71,16 @@
                 <label for="style" class="h4 mb-2">Style</label>
             </div>
 
-            <select class="browser-default custom-select" id="style" name="style">
+            <select th:field="*{style}"
+                    th:errorclass="'is-invalid alert-danger'"
+                    class="browser-default custom-select" id="style" name="style">
                 <option value="">Select style</option>
                 <option value="POP">Pop</option>
                 <option value="ROCK">Rock</option>
                 <option value="JAZZ">Jazz</option>
             </select>
 
-            <small>Style error message</small>
+            <small class="invalid-feedback text-danger">You must select a style!</small>
         </div>
 
         <div class="button-holder d-flex justify-content-center">
