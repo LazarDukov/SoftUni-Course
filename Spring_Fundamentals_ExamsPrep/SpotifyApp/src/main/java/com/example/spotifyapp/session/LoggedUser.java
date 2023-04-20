@@ -26,4 +26,22 @@ public class LoggedUser {
         this.id = null;
         this.username = null;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LoggedUser setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public LoggedUser setUsername(String username) {
+        this.username = username;
+        return this;
+    }
 }
