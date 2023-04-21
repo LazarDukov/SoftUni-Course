@@ -4,6 +4,7 @@ import com.example.spotifyapp.models.dtos.AddSongDTO;
 import com.example.spotifyapp.models.dtos.SongDTO;
 import com.example.spotifyapp.models.entities.Song;
 import com.example.spotifyapp.models.entities.Style;
+import com.example.spotifyapp.models.entities.User;
 import com.example.spotifyapp.models.enums.StyleName;
 import com.example.spotifyapp.repositories.SongRepository;
 import com.example.spotifyapp.repositories.StyleRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,6 +58,24 @@ public class SongService {
     }
 
     public List<SongDTO> getUserPlaylist(LoggedUser loggedUser) {
-       return this.userRepository.findById(loggedUser.getId()).orElseThrow().getPlaylist().stream().map(SongDTO::new).collect(Collectors.toList());
+        return this.userRepository.findById(loggedUser.getId()).orElseThrow().getPlaylist().stream().map(SongDTO::new).collect(Collectors.toList());
+    }
+
+    public void addSongsByUser(Long songId, Long userId) {
+        Song song = this.songRepository.findById(songId).orElse(null);
+        User user = this.userRepository.findById(userId).orElse(null);
+
+        assert user != null;
+        if (user.getPlaylist().stream().noneMatch(x -> x.getId().equals(song.getId()))) {
+            user.getPlaylist().add(song);
+            this.userRepository.save(user);
+        }
+    }
+
+    public void removeAllSongsFromPlaylist(Long userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(null);
+        user.removeAllSongsFromPlaylist();
+        userRepository.save(user);
+
     }
 }

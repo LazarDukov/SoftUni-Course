@@ -21,6 +21,10 @@ public class SongDTO {
         return String.format("%d:%02d", durationMinutes, durationSeconds);
     }
 
+    public String toStringTotal() {
+        return String.format("%d:%02d", durationOnlyInSeconds);
+    }
+
     public SongDTO() {
     }
 

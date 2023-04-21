@@ -49,11 +49,15 @@ public class HomeController {
         int totalSum = this.songService.getUserPlaylist(loggedUser).stream().mapToInt(SongDTO::getDurationOnlyInSeconds).sum();
         Integer minutesOfPlaylist = totalSum / 60;
         Integer secondsOfPlaylist = totalSum % 60;
+        String minutesToString = String.format("%d", minutesOfPlaylist);
+        String secondsToString = String.format("%02d", secondsOfPlaylist);
 
-        model.addAttribute("minutesOfPlaylist", minutesOfPlaylist);
-        model.addAttribute("secondsOfPlaylist", secondsOfPlaylist);
+        model.addAttribute("minutesToString", minutesToString);
+        model.addAttribute("secondsToString", secondsToString);
         return "home";
     }
+
+
 
 
 }

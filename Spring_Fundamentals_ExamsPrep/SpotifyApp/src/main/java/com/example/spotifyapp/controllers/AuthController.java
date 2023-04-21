@@ -2,6 +2,7 @@ package com.example.spotifyapp.controllers;
 
 import com.example.spotifyapp.models.dtos.LoginDTO;
 import com.example.spotifyapp.models.dtos.RegisterDTO;
+import com.example.spotifyapp.models.entities.User;
 import com.example.spotifyapp.repositories.UserRepository;
 import com.example.spotifyapp.services.AuthService;
 import com.example.spotifyapp.session.LoggedUser;
@@ -76,6 +77,12 @@ public class AuthController {
             return "redirect:/register";
         }
         return "redirect:/login";
+    }
+
+    @GetMapping("/logout")
+    public String logOut(LoggedUser loggedUser) {
+        loggedUser.logOut();
+        return "redirect:/";
     }
 
 }

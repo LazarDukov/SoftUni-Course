@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -47,5 +48,17 @@ public class SongController {
         this.songService.addSong(addSongDTO);
         return "redirect:/home";
 
+    }
+
+    @GetMapping("/song/add_to_user_playlist/{id}")
+    public String addSongByUser(@PathVariable Long id) {
+        this.songService.addSongsByUser(id, loggedUser.getId());
+        return "redirect:/home";
+    }
+
+    @GetMapping("/song/remove_all_songs")
+    public String removeAllSongs() {
+        this.songService.removeAllSongsFromPlaylist(loggedUser.getId());
+        return "redirect:/home";
     }
 }
