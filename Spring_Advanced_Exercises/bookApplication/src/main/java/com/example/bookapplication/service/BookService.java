@@ -2,7 +2,9 @@ package com.example.bookapplication.service;
 
 import com.example.bookapplication.dto.AuthorDTO;
 import com.example.bookapplication.dto.BookDTO;
+import com.example.bookapplication.entity.Author;
 import com.example.bookapplication.entity.Book;
+import com.example.bookapplication.repository.AuthorRepository;
 import com.example.bookapplication.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +14,11 @@ import java.util.Optional;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
 
-    public BookService(BookRepository bookRepository) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository) {
         this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
     }
 
     public List<BookDTO> getAllBooks() {
@@ -31,7 +35,26 @@ public class BookService {
     }
 
     public Optional<BookDTO> findBookById(Long bookId) {
-       return bookRepository.findById(bookId).map(this::map);
+        return bookRepository.findById(bookId).map(this::map);
     }
 
+    public void deleteBookById(Long bookId) {
+        bookRepository.deleteById(bookId);
+    }
+
+    public long createBook(BookDTO newBook) {
+        String author = newBook.getAuthor().getName();
+        Optional<Author> authorOpt = this.authorRepository.findByName(author);
+
+        Book createNewBook = new Book()
+                .setTitle(newBook.getTitle())
+                .setIsbn(newBook.getIsbn())
+                .setAuthor(authorOpt.orElseGet(()->createNewAuthor(author)));
+
+       return bookRepository.save(createNewBook).getId();
+    }
+
+    private Author createNewAuthor(String author) {
+       return this.authorRepository.save(new Author().setName(author));
+    }
 }
