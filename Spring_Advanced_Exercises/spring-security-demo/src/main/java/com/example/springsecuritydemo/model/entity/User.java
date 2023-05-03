@@ -81,6 +81,11 @@ public class User {
         return this;
     }
 
+    public User addRole(UserRole role) {
+        this.roles.add(role);
+        return this;
+    }
+
     @Override
     public String toString() {
         return "User{" +

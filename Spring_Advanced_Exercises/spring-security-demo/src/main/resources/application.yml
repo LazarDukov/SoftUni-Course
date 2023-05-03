@@ -27,7 +27,7 @@ spring:
 
 app:
   default:
-    password: lazar123
+    password: 12345
 
 logging:
   level:
