@@ -1,6 +1,7 @@
 package com.example.springsecuritydemo.model.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,20 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roles = new ArrayList<>();
+
+    public User() {
+    }
+
+    public User(Long id, String email, String firstName, String lastName, String password, List<UserRole> roles) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.roles = roles;
+    }
+
+
 
     public Long getId() {
         return id;
