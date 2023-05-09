@@ -8,6 +8,7 @@ import softuni.hateoas.model.entity.StudentEntity;
 import softuni.hateoas.repository.StudentRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,5 +36,9 @@ public class StudentService {
     private OrderDTO map(OrderEntity orderEntity) {
         return new OrderDTO().setStudentId(orderEntity.getStudent().getId())
                 .setCourseId(orderEntity.getCourse().getId());
+    }
+
+    public Optional<StudentDTO> getStudentById(Long studentId) {
+        return studentRepository.findById(studentId).map(this::map);
     }
 }
