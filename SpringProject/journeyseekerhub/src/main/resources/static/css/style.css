@@ -1,0 +1,61 @@
+.w-15 {
+    width: 15%;
+}
+
+.bg-gray {
+    background-color: #e9ecef;
+}
+
+.bg-nav{
+    background-color: rgba(1, 141, 8, 0);
+}
+
+
+body {
+    background-image: url(/img/aroundTheWorld.jpg);
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    margin-bottom: 5rem;
+}
+
+textarea {
+    resize: none;
+}
+.v-tooltip .v-errormessage {
+    line-break: auto;
+}
+
+footer {
+    position: static;
+    bottom: 0;
+    width: 100%;
+}
+
+
+.centered {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+h1 {
+    font-size: 90px;
+    color: #c69500;
+
+}
+
+.img-thumb {
+    padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    max-width: 100%;
+}
+
+
+
+.mySticky {
+    position: sticky;
+    left: 0;
+}
