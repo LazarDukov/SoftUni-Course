@@ -51,11 +51,11 @@ body {
 }
 
 .registerbox {
-    width: 320px;
-    height: 420px;
+    width: 1000px;
+    height: 750px;
     background:#0082e6;
     opacity: 0.9;
-    top: 52%;
+    top: 50%;
     left: 50%;
     position: absolute;
     transform: translate(-50%, -50%);
@@ -84,6 +84,7 @@ h1 {
     margin-bottom: 20px;
 
 }
+
 .registerbox input[type="text"], input[type="password"]
 {
     border: none;
