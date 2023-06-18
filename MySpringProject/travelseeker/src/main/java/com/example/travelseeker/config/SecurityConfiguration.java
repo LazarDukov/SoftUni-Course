@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private final UserRepository userRepository;
 
+
     public SecurityConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -28,13 +29,16 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests().
                 //defines which resources will be authorized
                         requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
-                requestMatchers("/", "/login", "/register").permitAll().
+                requestMatchers("/", "/login", "login-error", "/register").permitAll().
                 requestMatchers("/home").hasRole(UserRoleEnum.CLIENT.name()).
                 anyRequest().authenticated().
                 and().formLogin().loginPage("/login").
                 usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY).
                 passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
-                .defaultSuccessUrl("/", true).failureForwardUrl("/home").and().build();
+                .defaultSuccessUrl("/").failureForwardUrl("/login-error").
+                and().logout().logoutUrl("/logout").
+                logoutSuccessUrl("/").invalidateHttpSession(true).and().build();
+
 
     }
 
@@ -47,4 +51,6 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService() {
         return new ApplicationUserDetailsService(userRepository);
     }
+
+
 }
