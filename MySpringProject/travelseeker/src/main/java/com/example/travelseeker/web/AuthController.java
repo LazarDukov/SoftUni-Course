@@ -6,13 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AuthController {
 
-    @GetMapping("/register")
+    @GetMapping("/users/register")
     public String getRegister() {
         return "register";
     }
 
-    @GetMapping("/login")
-    public String getLogin() {
-        return "login";
-    }
+
 }

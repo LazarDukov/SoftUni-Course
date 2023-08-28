@@ -1,6 +1,5 @@
 package com.example.travelseeker.config;
 
-import com.example.travelseeker.model.enums.UserRoleEnum;
 import com.example.travelseeker.repository.UserRepository;
 import com.example.travelseeker.service.ApplicationUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -12,35 +11,41 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
 public class SecurityConfiguration {
-    private final UserRepository userRepository;
 
-
-    public SecurityConfiguration(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                //defines which pages will be authorized
-                .authorizeHttpRequests().
-                //defines which resources will be authorized
+        httpSecurity.
+                // defines which pages will be authorized
+                        authorizeHttpRequests().
+                // allow access to all static files (images, CSS, js)
                         requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
-                requestMatchers("/", "/login", "login-error", "/register").permitAll().
-                requestMatchers("/home").hasRole(UserRoleEnum.CLIENT.name()).
-                anyRequest().authenticated().
-                and().formLogin().loginPage("/login").
-                usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY).
-                passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
-                .defaultSuccessUrl("/").failureForwardUrl("/login-error").
-                and().logout().logoutUrl("/logout").
-                logoutSuccessUrl("/").invalidateHttpSession(true).and().build();
+                requestMatchers("/hotels", "/airplane_tickets", "/cars", "/", "/users/login", "/users/login-error", "/users/register", "/about-us", "/contacts").permitAll().
+                // the URL-s below are available for all users - logged in and anonymous
+                        anyRequest().authenticated().
+                and().
+                // configure login with HTML form
+                        formLogin().
+                loginPage("/users/login").
+                // the names of the username, password input fields in the custom login form
+                        usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY).
+                passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY).
+                // where do we go after login
+//              //use true argument if you always want to go there, otherwise go to previous page
+        defaultSuccessUrl("/", true).//use true argument if you always want to go there, otherwise go to previous page
+                failureForwardUrl("/users/login-error").and().logout().logoutUrl("/users/logout").logoutSuccessUrl("/").deleteCookies("JSESSIONID");
 
+        return httpSecurity.build();
 
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -48,7 +53,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
         return new ApplicationUserDetailsService(userRepository);
     }
 

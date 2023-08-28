@@ -1,11 +1,11 @@
 package com.example.travelseeker.service;
 
-import com.example.travelseeker.model.entities.UserEntity;
-import com.example.travelseeker.model.entities.UserRoleEntity;
+import com.example.travelseeker.model.entities.User;
+import com.example.travelseeker.model.entities.UserRole;
 import com.example.travelseeker.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,23 +22,24 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findUserEntityByUsername(username).map(this::map).orElseThrow(() -> new UsernameNotFoundException("User with name " + username + " not found!"));
+        return userRepository.findUserByUsername(username).map(this::map).orElseThrow(() -> new UsernameNotFoundException("User with name " + username + " not found!"));
     }
 
-    private UserDetails map(UserEntity userEntity) {
-      return   new User(userEntity.getUsername(),
-                userEntity.getPassword(),
-                extractGrantedAuthority(userEntity)
-        );
+    private UserDetails map(User user) {
+        return org.springframework.security.core.userdetails.User.builder().
+                username(user.getUsername()).password(user.getPassword()).authorities(
+                        extractGrantedAuthority(user)).build();
+
     }
 
-    private List<GrantedAuthority> extractGrantedAuthority(UserEntity userEntity) {
-      return   userEntity.getRoles().stream().map(this::mapRole).toList();
+    private List<GrantedAuthority> extractGrantedAuthority(User user) {
+        return user.getRoles().stream().map(this::mapRole).toList();
     }
 
-    private GrantedAuthority mapRole(UserRoleEntity userRoleEntity) {
-        return new SimpleGrantedAuthority("ROLE_" + userRoleEntity.getRole().name());
+    private GrantedAuthority mapRole(UserRole userRole) {
+        return new SimpleGrantedAuthority("ROLE_" + userRole.getRole().name());
 
     }
 }

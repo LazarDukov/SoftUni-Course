@@ -1,16 +1,18 @@
 package com.example.travelseeker.service;
 
-import com.example.travelseeker.model.entities.UserEntity;
-import com.example.travelseeker.model.entities.UserRoleEntity;
+import com.example.travelseeker.model.entities.User;
+import com.example.travelseeker.model.entities.UserRole;
 import com.example.travelseeker.model.enums.UserRoleEnum;
 import com.example.travelseeker.repository.UserRepository;
 import com.example.travelseeker.repository.UserRoleRepository;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
+
+import static com.example.travelseeker.model.enums.UserRoleEnum.*;
 
 
 @Service
@@ -21,86 +23,88 @@ public class InitService {
     private final PasswordEncoder passwordEncoder;
 
 
+    @Autowired
     public InitService(UserRepository userRepository,
                        UserRoleRepository userRoleRepository,
                        PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     @PostConstruct
     public void Init() {
-        initRoles();
-        initAdminUsers();
-        initClientUsers();
-        //    initSellerUsers();
+        if (userRoleRepository.count() == 0) {
+            initRoles();
+        }
+        if (userRepository.count() == 0) {
+            initAdminUsers();
+            initClientUsers();
+            initSellerUsers();
+        }
     }
 
 
     private void initRoles() {
-        if (userRoleRepository.count() == 0) {
-            UserRoleEntity admin = new UserRoleEntity().setRole(UserRoleEnum.ADMIN);
-            UserRoleEntity client = new UserRoleEntity().setRole(UserRoleEnum.CLIENT);
-            //   UserRoleEntity seller = new UserRoleEntity().setRole(UserRoleEnum.SELLER);
+        UserRole admin = new UserRole().setRole(ADMIN);
+        UserRole client = new UserRole().setRole(CLIENT);
+        UserRole seller = new UserRole().setRole(SELLER);
 
-            userRoleRepository.save(admin);
-            userRoleRepository.save(client);
-            //   userRoleRepository.save(seller);
-        }
+        userRoleRepository.save(admin);
+        userRoleRepository.save(client);
+        userRoleRepository.save(seller);
     }
 
     public void initAdminUsers() {
 
 
-        UserEntity userClient = new UserEntity().
-                setUsername("AdminAdminov").
-                setFirstName("Admin").
-                setLastName("Adminov").
-                setEmail("adminov@example.com").
-                setAge(40).
-                setRoles(userRoleRepository.findAll()).
-                setCountry("Bulgaria").
-                setPassword(passwordEncoder.encode("lazar123"));
-
-        userRepository.saveAndFlush(userClient);
+        User userAdmin = new User().setUsername("AdminAdminov")
+                .setFirstName("Admin")
+                .setLastName("Adminov")
+                .setEmail("adminov@gmail.com")
+                .setCountry("Bulgaria")
+                .setAge(40)
+                .setPassword(passwordEncoder.encode("lazar123"))
+                .setRoles(userRoleRepository.findUserRoleByRole(ADMIN));
 
 
+        userRepository.saveAndFlush(userAdmin);
     }
+
 
     private void initClientUsers() {
 
 
-        UserEntity userClient = new UserEntity().
-                setUsername("ClientClientov").
-                setFirstName("Client").
-                setLastName("Clientov").
-                setEmail("clientov@example.com").
-                setAge(30).
-                setRoles(userRoleRepository.findAll()).
-                setCountry("Germany").
-                setPassword(passwordEncoder.encode("lazar123"));
+        User userClient = new User().setUsername("ClientClientov")
+                .setFirstName("Client")
+                .setLastName("Client")
+                .setEmail("clientov@gmail.com")
+                .setCountry("Germany")
+                .setAge(30)
+                .setPassword(passwordEncoder.encode("lazar123"))
+                .setRoles(userRoleRepository.findUserRoleByRole(CLIENT));
+
 
         userRepository.saveAndFlush(userClient);
     }
 
 
-   /* private void initSellerUsers() {
+    private void initSellerUsers() {
 
-        var sellerUser = userRoleRepository.findUserRoleEntityByRole(UserRoleEnum.SELLER).orElseThrow();
 
-        var userSeller = UserEntity.builder()
-                .username("SellerSellerov")
-                .firstName("Seller")
-                .lastName("Sellerov")
-                .email("sellerov@example.com")
-                .age(40)
-                .roles(List.of(sellerUser))
-                .country("Bulgaria")
-                .password(passwordEncoder.encode("lazar123")).build();
+        User userSeller = new User().setUsername("SellerSellerov")
+                .setFirstName("Seller")
+                .setLastName("Sellerov")
+                .setEmail("sellerov@gmail.com")
+                .setCountry("Afganistan")
+                .setAge(60)
+                .setPassword(passwordEncoder.encode("lazar123"))
+                .setRoles(userRoleRepository.findUserRoleByRole(SELLER));
 
-        userRepository.save(userSeller);
+
+        userRepository.saveAndFlush(userSeller);
     }
-*/
+
 
 }
