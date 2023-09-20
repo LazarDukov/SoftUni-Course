@@ -21,7 +21,7 @@ public class SecurityConfiguration {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, SecurityContextRepository securityContextRepository) throws Exception {
         httpSecurity.
                 // defines which pages will be authorized
                         authorizeHttpRequests().
@@ -40,7 +40,10 @@ public class SecurityConfiguration {
                 // where do we go after login
 //              //use true argument if you always want to go there, otherwise go to previous page
         defaultSuccessUrl("/", true).//use true argument if you always want to go there, otherwise go to previous page
-                failureForwardUrl("/users/login-error").and().logout().logoutUrl("/users/logout").logoutSuccessUrl("/").deleteCookies("JSESSIONID");
+                failureForwardUrl("/users/login-error").and().logout().logoutUrl("/users/logout").logoutSuccessUrl("/").invalidateHttpSession(true).
+                and().
+                securityContext().
+                securityContextRepository(securityContextRepository);
 
         return httpSecurity.build();
 
@@ -55,6 +58,14 @@ public class SecurityConfiguration {
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return new ApplicationUserDetailsService(userRepository);
+    }
+
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new DelegatingSecurityContextRepository(
+                new RequestAttributeSecurityContextRepository(),
+                new HttpSessionSecurityContextRepository()
+        );
     }
 
 

@@ -41,7 +41,7 @@ public class User extends BaseEntity {
     public User() {
     }
 
-  /*  public User(String username, String firstName, String lastName, String email,
+   public User(String username, String firstName, String lastName, String email,
                 String country, int age, String password) {
 
         setUsername(username);
@@ -54,7 +54,7 @@ public class User extends BaseEntity {
         this.cart = new ArrayList<>();
         this.roles = new ArrayList<>();
         this.boughtOffers = new ArrayList<>();
-    }*/
+    }
 
     public String getUsername() {
         return username;
